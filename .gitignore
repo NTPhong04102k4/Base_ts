@@ -1,0 +1,29 @@
+# Bỏ qua node_modules và package-lock.json
+node_modules/
+package-lock.json
+
+# Bỏ qua các file môi trường
+.env
+.env.local
+.env.development
+.env.production
+.env.test
+
+# Bỏ qua các thư mục build và log
+dist/
+build/
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Bỏ qua cache của IDE
+.vscode/
+.idea/
+.DS_Store
+
+# Bỏ qua các file tạm thời
+tmp/
+temp/
+*.swp
