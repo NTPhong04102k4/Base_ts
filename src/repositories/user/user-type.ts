@@ -29,5 +29,5 @@ export type UserRequest = {
   code: string;
   status: string;
   password: string;
-  conf_password: string;
+  conf_pass: string;
 };

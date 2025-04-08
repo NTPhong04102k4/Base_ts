@@ -1,3 +1,4 @@
+import getErrorRes from "./get_Err";
 function Response(handle) {
   return async (req, res, next) => {
     try {
@@ -9,8 +10,8 @@ function Response(handle) {
         data: data,
       });
     } catch (err) {
-      //   const errorRes = getErrorRes(err);
-      return res.send({});
+      const errorRes = getErrorRes(err);
+      return res.send(errorRes);
     }
   };
 }
