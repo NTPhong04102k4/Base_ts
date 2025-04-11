@@ -1,18 +1,11 @@
 import Mongoose from "mongoose";
-import { OtpOutput } from "./otp-type";
+import { CategoryOutput } from "./category-type";
 import { AppConst } from "@libs/app-const";
+
 const { Schema } = Mongoose;
-const otp_schema = new Schema<OtpOutput>(
+const Category_schema = new Schema<CategoryOutput>(
   {
-    email: {
-      type: String,
-      required: true,
-    },
-    code: {
-      type: String,
-      required: true,
-    },
-    secret: {
+    name: {
       type: String,
       required: true,
     },
@@ -31,5 +24,5 @@ const otp_schema = new Schema<OtpOutput>(
   }
 );
 
-const OtpModel = Mongoose.model("Otp", otp_schema);
-export default OtpModel;
+const CategoryModel = Mongoose.model("Category", Category_schema);
+export default CategoryModel;

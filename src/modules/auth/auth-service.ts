@@ -1,4 +1,9 @@
+import { AppConst } from "@libs/app-const";
+import { hashPassword } from "@libs/auth/password-util";
 import { ErrorCode } from "@libs/error-code";
+import { verify_otp } from "@libs/otp-helper";
+import OtpModel from "@repositories/otp/otp-model";
+import { OtpOutput } from "@repositories/otp/otp-type";
 import UserModel from "@repositories/user/user-model";
 import {
   UserInput,
@@ -13,7 +18,7 @@ export interface iAuthService {
 export class AuthService {
   //============================PUBLIC FUNC===============================
   public async register(input: UserRequest): Promise<UserOutput> {
-    console.log("Auth service param:  ", input);
+    console.log("Params.Authservice.params: ", input);
     //Kiểm tra pass == conf_pass
     if (input.password != input.conf_pass) {
       throw ErrorCode.PASSWORD_NOT_MATCHED;
@@ -23,13 +28,41 @@ export class AuthService {
     if (user) {
       throw ErrorCode.EMAIL_IS_EXISTS;
     }
-    let _res = await UserModel.create(input);
-    return _res;
-    return;
+    //Kiểm tra pass đầu vào
+    if (!AppConst.REGEX.ADMIN_PASSWORD.test(input.password)) {
+      throw ErrorCode.PASSWORD_IS_NOT_CORRECT;
+    }
+    //Kiểm tra otp
+    let isVerifySuccess = await this._verifyOtp(input);
+    if (!isVerifySuccess) {
+      throw ErrorCode.INCORRECT_OTP_CODE;
+    }
+    const { password, conf_pass, code, ...rest } = input;
+
+    const newUser = {
+      ...rest,
+      hashed_pass: await hashPassword(password),
+    };
+    console.log("user; ", newUser);
+    return await UserModel.create(newUser);
   }
   //============================PRIVATE FUNC===============================
   private async _getUserByEmail(email: string): Promise<UserOutput> {
     let user = await UserModel.findOne({ email });
     return user;
+  }
+  private async _verifyOtp(params: any): Promise<Boolean> {
+    let otp = await this._getOtpByEmail(params.email);
+    if (otp) {
+      if (otp.code != params.code) return false;
+      // await OtpModel.deleteOne({ _id: otp._id });
+      // return verify_otp(otp.code, otp.secret);
+      return true;
+    }
+    return false;
+  }
+  private async _getOtpByEmail(email: string): Promise<OtpOutput> {
+    let otp = await OtpModel.findOne({ email });
+    return otp;
   }
 }

@@ -24,6 +24,7 @@ export type UserOutput = {
 };
 
 export type UserRequest = {
+  id: string;
   email: string;
   username: string;
   code: string;

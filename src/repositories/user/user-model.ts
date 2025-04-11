@@ -20,7 +20,6 @@ const user_chema = new Schema<UserOutput>(
     },
     password: {
       type: String,
-      required: true,
     },
     hashed_pass: {
       type: String,
@@ -28,7 +27,6 @@ const user_chema = new Schema<UserOutput>(
     },
     conf_pass: {
       type: String,
-      required: true,
     },
     status: {
       type: Number,
@@ -41,7 +39,6 @@ const user_chema = new Schema<UserOutput>(
     },
     code: {
       type: String,
-      required: true,
     },
   },
   {
