@@ -14,9 +14,9 @@
     "skipLibCheck": true,
     "noUnusedParameters": false,
     "noUnusedLocals": false,
-    "rootDir": "./src",
+    "rootDir": "src",
     "forceConsistentCasingInFileNames": true
   },
-  "exclude": ["node_modules", "dist"],
+  "exclude": ["back-end/node_modules", "dist"],
   "include": ["src/**/*"]
 }

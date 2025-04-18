@@ -12,6 +12,11 @@ export class AuthController {
     let _res = await this.authService.register(input);
     return _res;
   };
+  public login = async (req: Request, res: Response, next: NextFunction) => {
+    let input = req.body;
+    let _res = await this.authService.login(input);
+    return _res;
+  };
 }
 
 export default new AuthController();

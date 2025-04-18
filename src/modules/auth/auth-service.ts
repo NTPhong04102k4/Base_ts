@@ -1,5 +1,6 @@
 import { AppConst } from "@libs/app-const";
 import { hashPassword } from "@libs/auth/password-util";
+import { generateToken } from "@libs/auth/token-util";
 import { ErrorCode } from "@libs/error-code";
 import { verify_otp } from "@libs/otp-helper";
 import OtpModel from "@repositories/otp/otp-model";
@@ -13,6 +14,7 @@ import {
 
 export interface iAuthService {
   register(input: UserRequest): Promise<UserOutput>;
+  login(input: any): Promise<any>;
 }
 
 export class AuthService {
@@ -45,6 +47,20 @@ export class AuthService {
     };
     console.log("user; ", newUser);
     return await UserModel.create(newUser);
+  }
+  public async login(input: any): Promise<any> {
+    console.log("Params.Authservice.params: ", input);
+    let user = await this._getUserByEmail(input.email);
+    if (!user) {
+      throw ErrorCode.EMAIL_DOES_NOT_EXISTS;
+    }
+
+    let payload = {
+      _id: user._id,
+      email: user.email,
+    };
+    let token = generateToken(payload);
+    console.log("token: ", token);
   }
   //============================PRIVATE FUNC===============================
   private async _getUserByEmail(email: string): Promise<UserOutput> {

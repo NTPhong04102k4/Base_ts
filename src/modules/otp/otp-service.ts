@@ -1,11 +1,11 @@
 import { AppConst } from "@libs/app-const";
-import UserModel from "@repositories/user/user-model";
-import { UserOutput } from "@repositories/user/user-type";
-import { OtpOutput, OtpInput } from "@repositories/otp/otp-type";
 import sendMail, { EmailOption } from "@libs/email-helper";
+import { ErrorCode } from "@libs/error-code";
 import { generate_otp, gennerate_secret } from "@libs/otp-helper";
 import OtpModel from "@repositories/otp/otp-model";
-import { ErrorCode } from "@libs/error-code";
+import { OtpInput, OtpOutput } from "@repositories/otp/otp-type";
+import UserModel from "@repositories/user/user-model";
+import { UserOutput } from "@repositories/user/user-type";
 
 export type OtpReq = {
   email: string;
@@ -35,7 +35,7 @@ export class OtpService {
     if (!otp) {
       const newOtp = await this._generateOtp(params);
       const res = await OtpModel.create(newOtp);
-      await this._sendOTP(params);
+      await this._sendOTP(newOtp);
     } else {
       const newOtp = await this._generateOtp(params);
       let res = await OtpModel.updateOne({ _id: otp._id }, newOtp);
@@ -47,6 +47,7 @@ export class OtpService {
   private async _getUserByEmail(email: string): Promise<UserOutput> {
     return await UserModel.findOne({ email });
   }
+
   private async _sendOTP(params: any) {
     let to = params.email;
     let subject = "Your OTP Code for Email Verification";

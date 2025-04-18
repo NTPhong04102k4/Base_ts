@@ -1,8 +1,10 @@
+import Middleware from "@libs/api/middleware-api";
 import Response from "@libs/api/Response";
 import categoryController from "@services/category/category-controller";
 import express from "express";
+import { authenticateJWT } from "src/middlewares/auth-middleware";
 const category_api = express.Router();
-
+category_api.use(Middleware(authenticateJWT));
 category_api.post("/create", Response(categoryController.create));
 category_api.get("/get-all", Response(categoryController.getAll));
 export default category_api;

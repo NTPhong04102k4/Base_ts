@@ -10,8 +10,10 @@ class CategoryController {
     let newCategory = req.body;
     return await this.categoryService.create(newCategory);
   };
-  public getAll = async (req: Request, res: Response, next: NextFunction) => {
-    return await this.categoryService.getAll();
+  public getAll = async (req: any, res: Response, next: NextFunction) => {
+    let user = req.user;
+    console.log("user", user);
+    return await this.categoryService.getAll(user);
   };
 }
 export default new CategoryController();
