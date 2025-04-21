@@ -51,6 +51,8 @@ export class AuthService {
   public async login(input: any): Promise<any> {
     console.log("Params.Authservice.params: ", input);
     let user = await this._getUserByEmail(input.email);
+    console.log(user);
+
     if (!user) {
       throw ErrorCode.EMAIL_DOES_NOT_EXISTS;
     }
@@ -60,7 +62,8 @@ export class AuthService {
       email: user.email,
     };
     let token = generateToken(payload);
-    console.log("token: ", token);
+    console.log("token: ", token, user.username);
+    return { token, username: user.username };
   }
   //============================PRIVATE FUNC===============================
   private async _getUserByEmail(email: string): Promise<UserOutput> {
